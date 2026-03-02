@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guide WUP Coach Booking — ABTG</title>
+  <meta name="description" content="Documentazione ufficiale del sistema WUP Coach Booking di Alfio Bardolla Training Group. Guide per clienti, coach e consulenti." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #E57711;
+      --orange-light: #FDF1E4;
+      --orange-mid: #FDDDB6;
+      --orange-dark: #C5650E;
+      --green: #31B15C;
+      --green-light: #E8F7EE;
+      --green-dark: #279B4F;
+      --white: #FFFFFF;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+      --shadow-md: 0 8px 16px rgba(0,0,0,.08), 0 20px 48px rgba(0,0,0,.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--gray-900);
+      background: var(--gray-50);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--white);
+      border-bottom: 3px solid var(--orange);
+      padding: 20px 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-badge {
+      background: var(--orange);
+      color: var(--white);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      line-height: 1;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-900);
+      line-height: 1.2;
+    }
+
+    .logo-sub {
+      font-size: 11px;
+      color: var(--gray-500);
+      font-weight: 400;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(150deg, var(--gray-900) 0%, #1F2937 60%, #2D3748 100%);
+      color: var(--white);
+      padding: 64px 24px 56px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(229,119,17,.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--orange-mid);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 99px;
+      margin-bottom: 20px;
+    }
+
+    .hero-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+      display: inline-block;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 6vw, 48px);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .hero h1 .accent { color: var(--orange); }
+
+    .hero p {
+      font-size: clamp(15px, 2.5vw, 18px);
+      opacity: .80;
+      line-height: 1.65;
+      max-width: 500px;
+      margin: 0 auto 28px;
+    }
+
+    .hero-event {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(49,177,92,.15);
+      border: 1px solid rgba(49,177,92,.3);
+      color: #6EE7A0;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 99px;
+    }
+
+    /* ── Main ── */
+    .main {
+      flex: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 48px 24px 80px;
+    }
+
+    .cards-intro {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .cards-intro h2 {
+      font-size: clamp(18px, 3vw, 24px);
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .cards-intro p {
+      font-size: 15px;
+      color: var(--gray-500);
+    }
+
+    /* ── Cards grid ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .guide-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: transform .25s cubic-bezier(.22,.68,0,1.2), box-shadow .25s;
+      position: relative;
+    }
+
+    .guide-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .guide-card:focus-visible {
+      outline: 3px solid var(--orange);
+      outline-offset: 3px;
+    }
+
+    .card-stripe {
+      height: 5px;
+      width: 100%;
+    }
+
+    .card-stripe.client { background: var(--green); }
+    .card-stripe.coach { background: var(--orange); }
+    .card-stripe.seller { background: #6366F1; }
+
+    .card-body {
+      padding: 28px 24px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .card-icon-wrap.client {
+      background: var(--green-light);
+      color: var(--green-dark);
+    }
+
+    .card-icon-wrap.coach {
+      background: var(--orange-light);
+      color: var(--orange-dark);
+    }
+
+    .card-icon-wrap.seller {
+      background: #EEF2FF;
+      color: #4338CA;
+    }
+
+    .card-audience {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .card-audience.client { color: var(--green-dark); }
+    .card-audience.coach { color: var(--orange-dark); }
+    .card-audience.seller { color: #4338CA; }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: 10px;
+      line-height: 1.3;
+      letter-spacing: -0.3px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--gray-500);
+      line-height: 1.6;
+      flex: 1;
+      margin-bottom: 20px;
+    }
+
+    .card-topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .topic-tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 99px;
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      background: var(--gray-50);
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .card-cta {
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-cta.client { color: var(--green-dark); }
+    .card-cta.coach { color: var(--orange-dark); }
+    .card-cta.seller { color: #4338CA; }
+
+    .card-time {
+      font-size: 12px;
+      color: var(--gray-400);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ── Event banner ── */
+    .event-banner {
+      background: linear-gradient(135deg, var(--orange) 0%, #F08C2A 100%);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: var(--white);
+      box-shadow: 0 8px 24px rgba(229,119,17,.3);
+    }
+
+    .event-banner-icon {
+      flex-shrink: 0;
+      width: 52px;
+      height: 52px;
+      background: rgba(255,255,255,.2);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .event-banner-body { flex: 1; }
+
+    .event-banner-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .event-banner-sub {
+      font-size: 14px;
+      opacity: .88;
+    }
+
+    .event-dates {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 0;
+    }
+
+    .event-date {
+      background: rgba(255,255,255,.22);
+      border: 1px solid rgba(255,255,255,.3);
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* ── Back to top ── */
+    .back-top {
+      display: flex;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .btn-back-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--white);
+      color: var(--gray-700);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 99px;
+      border: 1px solid var(--gray-200);
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+      transition: border-color .2s, color .2s, box-shadow .2s;
+    }
+
+    .btn-back-top:hover, .btn-back-top:focus-visible {
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    .btn-back-top:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+
+    /* ── Footer ── */
+    .site-footer {
+      background: var(--gray-900);
+      color: var(--gray-500);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+    }
+
+    .site-footer strong { color: var(--white); font-weight: 600; }
+
+    .footer-tagline {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-top: 6px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .event-banner { flex-direction: column; text-align: center; }
+      .event-banner-icon { display: none; }
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header" id="top">
+    <div class="header-inner">
+      <a href="#" class="logo" aria-label="WUP Coach Booking — Pagina principale">
+        <span class="logo-badge">WUP</span>
+        <span class="logo-text">
+          <span class="logo-title">Coach Booking</span>
+          <span class="logo-sub">Alfio Bardolla Training Group</span>
+        </span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-h1">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">
+        <span class="hero-dot" aria-hidden="true"></span>
+        Documentazione ufficiale
+      </div>
+      <h1 id="hero-h1">Guide del sistema<br><span class="accent">WUP Coach Booking</span></h1>
+      <p>Tutto quello che serve per prenotare, gestire la disponibilita e assistere i clienti durante l'evento.</p>
+      <div class="hero-event" aria-label="Date dell'evento: 13, 14 e 15 marzo 2026">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Evento: 13-14-15 marzo 2026
+      </div>
+    </div>
+  </section>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <div class="cards-intro">
+      <h2>Scegli la tua guida</h2>
+      <p>Seleziona la guida in base al tuo ruolo nell'evento WUP.</p>
+    </div>
+
+    <!-- Cards -->
+    <div class="cards-grid" role="list" aria-label="Guide disponibili per ruolo">
+
+      <!-- Card Clienti -->
+      <a href="guida-clienti.html" class="guide-card" role="listitem" aria-label="Leggi la guida per i clienti: Come prenotare la tua sessione">
+        <div class="card-stripe client" aria-hidden="true"></div>
+        <div class="card-body">
+          <div class="card-icon-wrap client" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <p class="card-audience client">Per i Clienti</p>
+          <h3 class="card-title">Come prenotare la tua sessione</h3>
+          <p class="card-desc">Guida passo-passo per prenotare la sessione gratuita di orientamento con un coach WUP durante l'evento.</p>
+          <div class="card-topics" aria-label="Argomenti trattati">
+            <span class="topic-tag">Prenotazione</span>
+            <span class="topic-tag">Scelta coach</span>
+            <span class="topic-tag">Cancellazione</span>
+            <span class="topic-tag">FAQ</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-cta client">
+            Leggi la guida
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+          <span class="card-time" aria-label="Tempo di lettura: 3 minuti">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            3 min
+          </span>
+        </div>
+      </a>
+
+      <!-- Card Coach -->
+      <a href="guida-coach.html" class="guide-card" role="listitem" aria-label="Leggi la guida per i coach: Gestione disponibilita Google Calendar">
+        <div class="card-stripe coach" aria-hidden="true"></div>
+        <div class="card-body">
+          <div class="card-icon-wrap coach" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="16" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="8" y2="18"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+          </div>
+          <p class="card-audience coach">Per i Coach</p>
+          <h3 class="card-title">Gestione disponibilita</h3>
+          <p class="card-desc">Come gestire la tua agenda tramite Google Calendar, bloccare orari e ricevere notifiche sulle prenotazioni.</p>
+          <div class="card-topics" aria-label="Argomenti trattati">
+            <span class="topic-tag">Google Calendar</span>
+            <span class="topic-tag">Blocco orari</span>
+            <span class="topic-tag">Notifiche</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-cta coach">
+            Leggi la guida
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+          <span class="card-time" aria-label="Tempo di lettura: 4 minuti">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            4 min
+          </span>
+        </div>
+      </a>
+
+      <!-- Card Venditori -->
+      <a href="guida-venditori.html" class="guide-card" role="listitem" aria-label="Leggi la guida per i consulenti: Come assistere i clienti nella prenotazione">
+        <div class="card-stripe seller" aria-hidden="true"></div>
+        <div class="card-body">
+          <div class="card-icon-wrap seller" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <p class="card-audience seller">Per i Consulenti</p>
+          <h3 class="card-title">Come assistere i clienti</h3>
+          <p class="card-desc">Come condividere il link di prenotazione, risolvere i problemi piu comuni e supportare i clienti prima dell'evento.</p>
+          <div class="card-topics" aria-label="Argomenti trattati">
+            <span class="topic-tag">Link da condividere</span>
+            <span class="topic-tag">Troubleshooting</span>
+            <span class="topic-tag">Suggerimenti</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-cta seller">
+            Leggi la guida
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+          <span class="card-time" aria-label="Tempo di lettura: 4 minuti">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            4 min
+          </span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Event banner -->
+    <div class="event-banner" role="complementary" aria-label="Dettagli evento WUP">
+      <div class="event-banner-icon" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <div class="event-banner-body">
+        <p class="event-banner-title">Evento WUP — Sessioni di orientamento</p>
+        <div class="event-dates" aria-label="Date dell'evento">
+          <span class="event-date">Ven 13 marzo</span>
+          <span class="event-date">Sab 14 marzo</span>
+          <span class="event-date">Dom 15 marzo 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back to top -->
+    <div class="back-top">
+      <a href="#top" class="btn-back-top" aria-label="Torna all'inizio della pagina">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        Torna su
+      </a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>&copy; 2026 <strong>Alfio Bardolla Training Group S.p.A.</strong> — Tutti i diritti riservati.</p>
+    <p class="footer-tagline">Sistema WUP Coach Booking — Documentazione interna</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Come prenotare la tua sessione — WUP Coach Booking</title>
+  <meta name="description" content="Guida passo-passo per prenotare la tua sessione gratuita di orientamento con un coach WUP durante l'evento ABTG." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #E57711;
+      --orange-light: #FDF1E4;
+      --orange-dark: #C5650E;
+      --green: #31B15C;
+      --green-light: #E8F7EE;
+      --green-dark: #279B4F;
+      --white: #FFFFFF;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-500: #6B7280;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+      --shadow-md: 0 4px 6px rgba(0,0,0,.07), 0 10px 30px rgba(0,0,0,.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--gray-900);
+      background: var(--gray-50);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--white);
+      border-bottom: 3px solid var(--orange);
+      padding: 20px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .header-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-badge {
+      background: var(--orange);
+      color: var(--white);
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      line-height: 1;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gray-900);
+      line-height: 1.2;
+    }
+
+    .logo-sub {
+      font-size: 11px;
+      color: var(--gray-500);
+      font-weight: 400;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--orange) 0%, #F08C2A 100%);
+      color: var(--white);
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,.2);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 99px;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: clamp(22px, 5vw, 34px);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero p {
+      font-size: clamp(15px, 2.5vw, 17px);
+      opacity: .92;
+      max-width: 580px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+
+    /* ── Main layout ── */
+    .main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-size: clamp(18px, 3vw, 22px);
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--gray-200);
+      letter-spacing: -0.3px;
+    }
+
+    /* ── Steps ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 56px;
+    }
+
+    .step-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      border: 1px solid var(--gray-200);
+      transition: box-shadow .2s, transform .2s;
+    }
+
+    .step-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      background: var(--orange);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1;
+      box-shadow: 0 4px 12px rgba(229,119,17,.35);
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 6px;
+    }
+
+    .step-desc {
+      font-size: 15px;
+      color: var(--gray-700);
+      line-height: 1.6;
+    }
+
+    .step-desc .highlight {
+      color: var(--green-dark);
+      font-weight: 600;
+    }
+
+    /* ── Info chips ── */
+    .info-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 99px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      border: 1px solid rgba(49,177,92,.25);
+    }
+
+    .chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    /* ── FAQ ── */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .faq-item {
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--gray-200);
+      border-left: 4px solid var(--orange);
+      padding: 20px 20px 20px 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .faq-question {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .faq-icon {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      background: var(--orange-light);
+      color: var(--orange);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      margin-top: 1px;
+    }
+
+    .faq-answer {
+      font-size: 14px;
+      color: var(--gray-700);
+      line-height: 1.65;
+      padding-left: 32px;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      background: var(--green-light);
+      border: 1px solid rgba(49,177,92,.2);
+      border-radius: var(--radius);
+      padding: 36px 24px;
+    }
+
+    .cta-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+
+    .cta-sub {
+      font-size: 14px;
+      color: var(--gray-700);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 14px 32px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(49,177,92,.4);
+      transition: background .2s, transform .2s, box-shadow .2s;
+    }
+
+    .btn-cta:hover, .btn-cta:focus-visible {
+      background: var(--green-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(49,177,92,.45);
+    }
+
+    .btn-cta:active { transform: translateY(0); }
+
+    .btn-cta:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+
+    /* ── Back to top ── */
+    .back-top {
+      display: flex;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .btn-back-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--white);
+      color: var(--gray-700);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 99px;
+      border: 1px solid var(--gray-200);
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+      transition: border-color .2s, color .2s, box-shadow .2s;
+    }
+
+    .btn-back-top:hover, .btn-back-top:focus-visible {
+      border-color: var(--orange);
+      color: var(--orange);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-back-top:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+
+    /* ── Footer ── */
+    .site-footer {
+      background: var(--gray-900);
+      color: var(--gray-500);
+      text-align: center;
+      padding: 28px 24px;
+      font-size: 13px;
+    }
+
+    .site-footer strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .footer-links {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--gray-500);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color .2s;
+    }
+
+    .footer-links a:hover { color: var(--orange); }
+
+    /* ── Responsive ── */
+    @media (max-width: 520px) {
+      .step-card { flex-direction: column; gap: 14px; }
+      .step-number { width: 38px; height: 38px; font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header" id="top">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="WUP Coach Booking — Torna all'indice">
+        <span class="logo-badge">WUP</span>
+        <span class="logo-text">
+          <span class="logo-title">Coach Booking</span>
+          <span class="logo-sub">Alfio Bardolla Training Group</span>
+        </span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <span class="hero-tag">Guida per i Clienti</span>
+    <h1 id="hero-title">Come prenotare la tua sessione di orientamento</h1>
+    <p>Hai ricevuto un link da un consulente WUP. Segui questi semplici passi per prenotare la tua sessione gratuita di orientamento con un coach.</p>
+  </section>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <!-- Steps section -->
+    <section aria-labelledby="steps-title">
+      <h2 class="section-title" id="steps-title">Segui questi 5 passi</h2>
+
+      <ol class="steps" aria-label="Passi per prenotare la sessione">
+
+        <li class="step-card">
+          <div class="step-number" aria-hidden="true">1</div>
+          <div class="step-content">
+            <p class="step-title">Scegli il tuo coach</p>
+            <p class="step-desc">Scorri la lista dei coach disponibili e clicca <strong>"Prenota ora"</strong> sul coach che preferisci, oppure su quello suggerito dal tuo consulente WUP.</p>
+          </div>
+        </li>
+
+        <li class="step-card">
+          <div class="step-number" aria-hidden="true">2</div>
+          <div class="step-content">
+            <p class="step-title">Seleziona la data</p>
+            <p class="step-desc">Scegli tra <strong>venerdì 13</strong>, <strong>sabato 14</strong> o <strong>domenica 15 marzo 2026</strong>.</p>
+            <div class="info-chips" role="list" aria-label="Date disponibili">
+              <span class="chip" role="listitem"><span class="chip-dot" aria-hidden="true"></span>Ven 13 marzo</span>
+              <span class="chip" role="listitem"><span class="chip-dot" aria-hidden="true"></span>Sab 14 marzo</span>
+              <span class="chip" role="listitem"><span class="chip-dot" aria-hidden="true"></span>Dom 15 marzo</span>
+            </div>
+            <p class="step-desc" style="margin-top:10px;">Le date mostrate <span class="highlight">in verde</span> sono disponibili per la prenotazione.</p>
+          </div>
+        </li>
+
+        <li class="step-card">
+          <div class="step-number" aria-hidden="true">3</div>
+          <div class="step-content">
+            <p class="step-title">Scegli l'orario</p>
+            <p class="step-desc">Seleziona lo slot orario che preferisci tra quelli disponibili. <strong>Ogni sessione dura 20 minuti.</strong> Gli slot già prenotati non saranno selezionabili.</p>
+          </div>
+        </li>
+
+        <li class="step-card">
+          <div class="step-number" aria-hidden="true">4</div>
+          <div class="step-content">
+            <p class="step-title">Inserisci i tuoi dati</p>
+            <p class="step-desc">Compila il modulo con <strong>nome</strong>, <strong>cognome</strong>, <strong>email</strong> e <strong>numero di telefono</strong>. Leggi e accetta la privacy policy per completare la prenotazione.</p>
+          </div>
+        </li>
+
+        <li class="step-card">
+          <div class="step-number" aria-hidden="true">5</div>
+          <div class="step-content">
+            <p class="step-title">Conferma!</p>
+            <p class="step-desc">Riceverai una <strong>email di conferma</strong> con tutti i dettagli della prenotazione. Nell'email troverai anche un link per cancellare la sessione se necessario.</p>
+          </div>
+        </li>
+
+      </ol>
+    </section>
+
+    <!-- FAQ section -->
+    <section aria-labelledby="faq-title">
+      <h2 class="section-title" id="faq-title">Domande frequenti</h2>
+
+      <dl class="faq-list">
+
+        <div class="faq-item">
+          <dt class="faq-question">
+            <span class="faq-icon" aria-hidden="true">?</span>
+            Posso cancellare la prenotazione?
+          </dt>
+          <dd class="faq-answer">
+            Si, puoi cancellare tramite il link che trovi nell'email di conferma. Ti chiediamo di farlo almeno <strong>24 ore prima</strong> della sessione, in modo da liberare lo slot per altri clienti.
+          </dd>
+        </div>
+
+        <div class="faq-item">
+          <dt class="faq-question">
+            <span class="faq-icon" aria-hidden="true">?</span>
+            Quanto dura la sessione?
+          </dt>
+          <dd class="faq-answer">
+            La sessione di orientamento dura <strong>20 minuti</strong>. Ti consigliamo di arrivare con una domanda precisa per sfruttare al meglio il tempo con il coach.
+          </dd>
+        </div>
+
+        <div class="faq-item">
+          <dt class="faq-question">
+            <span class="faq-icon" aria-hidden="true">?</span>
+            Dove si svolge la sessione?
+          </dt>
+          <dd class="faq-answer">
+            La sessione si svolge <strong>di persona all'evento WUP</strong>. Il tuo consulente ti fornira tutti i dettagli sulla location e su come raggiungerla.
+          </dd>
+        </div>
+
+        <div class="faq-item">
+          <dt class="faq-question">
+            <span class="faq-icon" aria-hidden="true">?</span>
+            Non ricevo l'email di conferma, cosa faccio?
+          </dt>
+          <dd class="faq-answer">
+            Prima di tutto controlla la cartella <strong>spam</strong> o posta indesiderata. Se non la trovi neanche li, contatta direttamente il tuo consulente WUP che potra verificare la prenotazione.
+          </dd>
+        </div>
+
+      </dl>
+    </section>
+
+    <!-- CTA section -->
+    <section class="cta-section" aria-labelledby="cta-title">
+      <h2 class="cta-title" id="cta-title">Pronto a prenotare?</h2>
+      <p class="cta-sub">Clicca sul bottone per accedere al sistema di prenotazione. La sessione e completamente gratuita.</p>
+      <a href="#" class="btn-cta" aria-label="Vai al sistema di prenotazione WUP">
+        Vai alla prenotazione
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </section>
+
+    <!-- Back to top -->
+    <div class="back-top">
+      <a href="#top" class="btn-back-top" aria-label="Torna all'inizio della pagina">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        Torna su
+      </a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>&copy; 2026 <strong>Alfio Bardolla Training Group S.p.A.</strong> — Tutti i diritti riservati.</p>
+    <nav class="footer-links" aria-label="Link del footer">
+      <a href="index.html">Indice guide</a>
+      <a href="guida-coach.html">Guida Coach</a>
+      <a href="guida-venditori.html">Guida Consulenti</a>
+    </nav>
+  </footer>
+
+</body>
+</html>
