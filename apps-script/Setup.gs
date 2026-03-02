@@ -171,6 +171,8 @@ function syncCoaches() {
     ['coach_025','Giacomo','Bertuso','giacomo.bertuso@alfiobardolla.com','Coach','','','DA_INSERIRE','09:00','18:00',20,'TRUE'],
     ['coach_026','Carlo','Cuoco','carlo.cuoco@alfiobardolla.com','Coach','','','DA_INSERIRE','09:00','18:00',20,'TRUE'],
     ['coach_027','Paolo','Lavorenti','paolo.lavorenti@alfiobardolla.com','Coach','','','DA_INSERIRE','09:00','18:00',20,'TRUE'],
+    ['coach_028','Chiara','Nicoloso','chiara.nicoloso@alfiobardolla.com','Coach','','','DA_INSERIRE','09:00','18:00',20,'TRUE'],
+    ['coach_029','Emanuele','Salvato','emanuele.salvato@alfiobardolla.com','Mentor','','','DA_INSERIRE','09:00','18:00',20,'TRUE'],
   ];
 
   let aggiunti = 0;
