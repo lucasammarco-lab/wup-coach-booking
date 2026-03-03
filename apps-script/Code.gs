@@ -129,7 +129,7 @@ function _buildCancelPageResponse(token, apiResult) {
       '<div class="icon-circle">' + icon + '</div>' +
       '<h1>' + title + '</h1>' +
       '<p class="msg">' + message + '</p>' +
-      '<a href="' + APP_URL + '" class="btn">Prenota una nuova sessione</a>' +
+      '<a href="https://lp.alfiobardolla.com/prenotazione-wup/" class="btn">Prenota una nuova sessione</a>' +
       '<p class="brand">&copy; ' + new Date().getFullYear() + ' WUP Coach Booking — ABTG</p>' +
       '</div></div></body></html>';
 
