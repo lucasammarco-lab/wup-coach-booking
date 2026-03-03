@@ -8,7 +8,12 @@
 const SPREADSHEET_ID = '1Riwitz-Qwip2HctDWBmrCXM5XfbEZ3sEkSA5RPKT1GI';
 
 // Email dell'amministratore WUP (riceve alert tecnici)
-const ADMIN_EMAIL = 'wup-admin@example.com';
+const ADMIN_EMAIL = 'marco.sorrentino@alfiobardolla.com';
+
+// Email mittente per tutte le email transazionali
+// IMPORTANTE: deve essere configurata come alias "Invia come" nel tuo Gmail
+const SENDER_EMAIL = 'info@alfiobardolla.com';
+const SENDER_NAME  = 'WUP Coach Booking';
 
 // Nome dell'applicazione (usato nei template email e log)
 const APP_NAME = 'WUP Coach Booking';

@@ -1,6 +1,7 @@
 /**
  * Email.gs
  * Invio email transazionali per WUP Coach Booking.
+ * Mittente: SENDER_EMAIL (alias Gmail configurato in Config.gs)
  */
 
 function sendBookingConfirmationToClient(bookingData, coach) {
@@ -30,11 +31,16 @@ function sendBookingConfirmationToClient(bookingData, coach) {
       '<p style="font-size:11px;color:#999;margin:12px 0 0;word-break:break-all">Oppure copia questo link nel browser: ' + cancelUrl + '</p>'
     ].join('');
 
-    MailApp.sendEmail({
-      to: bookingData.client_email,
-      subject: 'Confermata la tua sessione WUP con ' + coachFullName.trim(),
-      htmlBody: buildEmailTemplate('Prenotazione confermata', bodyHtml)
-    });
+    GmailApp.sendEmail(
+      bookingData.client_email,
+      'Confermata la tua sessione WUP con ' + coachFullName.trim(),
+      '',
+      {
+        from:     SENDER_EMAIL,
+        name:     SENDER_NAME,
+        htmlBody: buildEmailTemplate('Prenotazione confermata', bodyHtml)
+      }
+    );
 
     logAudit(LOG_LEVEL.INFO, 'EMAIL_CLIENT', bookingData.booking_id,
       'Email conferma inviata a ' + bookingData.client_email, {});
@@ -69,12 +75,17 @@ function sendBookingNotificationToCoach(bookingData, coach) {
       '<p>L\'evento è stato aggiunto al tuo calendario Google "Managed".</p>'
     ].join('');
 
-    MailApp.sendEmail({
-      to: coach.email,
-      subject: 'Nuova prenotazione WUP: ' + clientFullName + ' – ' +
-               Utilities.formatDate(startDate, TIMEZONE, 'dd/MM/yyyy'),
-      htmlBody: buildEmailTemplate('Nuova prenotazione', bodyHtml)
-    });
+    GmailApp.sendEmail(
+      coach.email,
+      'Nuova prenotazione WUP: ' + clientFullName + ' – ' +
+        Utilities.formatDate(startDate, TIMEZONE, 'dd/MM/yyyy'),
+      '',
+      {
+        from:     SENDER_EMAIL,
+        name:     SENDER_NAME,
+        htmlBody: buildEmailTemplate('Nuova prenotazione', bodyHtml)
+      }
+    );
 
     logAudit(LOG_LEVEL.INFO, 'EMAIL_COACH', bookingData.booking_id,
       'Email notifica inviata a ' + coach.email, {});
@@ -102,11 +113,16 @@ function sendCancellationToClient(bookingData, coach) {
       '<p><a href="' + APP_URL + '" style="background:#3498db;color:#fff;padding:10px 20px;text-decoration:none;border-radius:4px;">Prenota una nuova sessione</a></p>'
     ].join('');
 
-    MailApp.sendEmail({
-      to: bookingData.client_email,
-      subject: 'Prenotazione WUP cancellata – ' + Utilities.formatDate(startDate, TIMEZONE, 'dd/MM/yyyy'),
-      htmlBody: buildEmailTemplate('Prenotazione cancellata', bodyHtml)
-    });
+    GmailApp.sendEmail(
+      bookingData.client_email,
+      'Prenotazione WUP cancellata – ' + Utilities.formatDate(startDate, TIMEZONE, 'dd/MM/yyyy'),
+      '',
+      {
+        from:     SENDER_EMAIL,
+        name:     SENDER_NAME,
+        htmlBody: buildEmailTemplate('Prenotazione cancellata', bodyHtml)
+      }
+    );
   } catch (err) {
     logAudit(LOG_LEVEL.ERROR, 'EMAIL_CANCEL_CLIENT', String(bookingData.booking_id),
       'Errore: ' + err.message, {});
@@ -130,12 +146,17 @@ function sendCancellationToCoach(bookingData, coach) {
       '<p>L\'evento è stato rimosso dal tuo calendario. Lo slot è di nuovo disponibile.</p>'
     ].join('');
 
-    MailApp.sendEmail({
-      to: coach.email,
-      subject: 'Prenotazione cancellata: ' + clientFullName + ' – ' +
-               Utilities.formatDate(startDate, TIMEZONE, 'dd/MM/yyyy'),
-      htmlBody: buildEmailTemplate('Prenotazione cancellata', bodyHtml)
-    });
+    GmailApp.sendEmail(
+      coach.email,
+      'Prenotazione cancellata: ' + clientFullName + ' – ' +
+        Utilities.formatDate(startDate, TIMEZONE, 'dd/MM/yyyy'),
+      '',
+      {
+        from:     SENDER_EMAIL,
+        name:     SENDER_NAME,
+        htmlBody: buildEmailTemplate('Prenotazione cancellata', bodyHtml)
+      }
+    );
   } catch (err) {
     logAudit(LOG_LEVEL.ERROR, 'EMAIL_CANCEL_COACH', String(bookingData.booking_id),
       'Errore: ' + err.message, {});
@@ -147,11 +168,16 @@ function sendAdminAlert(subject, message) {
     const bodyHtml = '<pre style="background:#f4f4f4;padding:12px;border-radius:4px">' +
       sanitizeString(message) + '</pre>' +
       '<p style="color:#888;font-size:11px">Timestamp: ' + formatDatetime(new Date()) + '</p>';
-    MailApp.sendEmail({
-      to: ADMIN_EMAIL,
-      subject: '[WUP ALERT] ' + subject,
-      htmlBody: buildEmailTemplate('Alert Tecnico WUP', bodyHtml)
-    });
+    GmailApp.sendEmail(
+      ADMIN_EMAIL,
+      '[WUP ALERT] ' + subject,
+      '',
+      {
+        from:     SENDER_EMAIL,
+        name:     SENDER_NAME,
+        htmlBody: buildEmailTemplate('Alert Tecnico WUP', bodyHtml)
+      }
+    );
   } catch (err) {
     Logger.log('CRITICO: impossibile inviare alert admin - ' + err.message);
   }
