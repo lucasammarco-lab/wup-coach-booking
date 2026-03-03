@@ -363,6 +363,99 @@ function _isoDatePart(isoStr) {
   return String(isoStr).substring(0, 10);
 }
 
+/**
+ * GET ?action=getCoachLinks&admin_token=TOKEN
+ * Restituisce tutti i coach attivi con il loro URL dashboard personale.
+ */
+function handleGetCoachLinks(params) {
+  try {
+    if (!params.admin_token || params.admin_token !== DASHBOARD_ADMIN_TOKEN) {
+      return errorResponse('Non autorizzato.', 'UNAUTHORIZED');
+    }
+
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheet = ss.getSheetByName(SHEETS.COACHES);
+    const data = sheet.getDataRange().getValues();
+    const headers = data[0];
+
+    const colId      = headers.indexOf('id');
+    const colNome    = headers.indexOf('nome');
+    const colCognome = headers.indexOf('cognome');
+    const colRuolo   = headers.indexOf('ruolo');
+    const colEmail   = headers.indexOf('email');
+    const colActive  = headers.indexOf('active');
+    const colToken   = headers.indexOf('dashboard_token');
+
+    const BASE = 'https://lucasammarco-lab.github.io/wup-coach-dashboard/coach.html';
+    const coaches = [];
+
+    for (let i = 1; i < data.length; i++) {
+      const row = data[i];
+      if (String(row[colActive]).toUpperCase() !== 'TRUE') continue;
+      const token = String(row[colToken] || '');
+      const id    = String(row[colId]);
+      coaches.push({
+        id:      id,
+        nome:    String(row[colNome]),
+        cognome: String(row[colCognome]),
+        ruolo:   String(row[colRuolo] || ''),
+        email:   String(row[colEmail] || ''),
+        url:     token ? BASE + '?id=' + encodeURIComponent(id) + '&token=' + token : ''
+      });
+    }
+
+    return successResponse({ coaches: coaches });
+  } catch(err) {
+    logAudit(LOG_LEVEL.ERROR, 'GET_COACH_LINKS', '', err.message, {});
+    return errorResponse('Errore nel recupero dei link.', 'GET_COACH_LINKS_ERROR');
+  }
+}
+
+/**
+ * POST { action: 'updateBookingOutcome', admin_token, booking_id, esito }
+ * Aggiorna l'esito commerciale di una prenotazione (VENDUTO / NON_VENDUTO / IN_TRATTATIVA).
+ * Crea la colonna 'esito' nel foglio Bookings se non esiste.
+ */
+function handleUpdateBookingOutcome(params) {
+  try {
+    if (!params.admin_token || params.admin_token !== DASHBOARD_ADMIN_TOKEN) {
+      return errorResponse('Non autorizzato.', 'UNAUTHORIZED');
+    }
+    if (!params.booking_id) return errorResponse('booking_id mancante.', 'MISSING_BOOKING_ID');
+
+    const VALID = ['VENDUTO', 'NON_VENDUTO', 'IN_TRATTATIVA', ''];
+    if (VALID.indexOf(params.esito || '') === -1) {
+      return errorResponse('Esito non valido.', 'INVALID_ESITO');
+    }
+
+    const sheet = getSheet(SHEETS.BOOKINGS);
+    const data  = sheet.getDataRange().getValues();
+    const headers = data[0];
+    const idIdx   = headers.indexOf('booking_id');
+
+    // Aggiungi colonna esito se non esiste
+    let esitoIdx = headers.indexOf('esito');
+    if (esitoIdx === -1) {
+      esitoIdx = headers.length;
+      sheet.getRange(1, esitoIdx + 1).setValue('esito').setFontWeight('bold').setBackground('#D3D3D3');
+    }
+
+    for (let i = 1; i < data.length; i++) {
+      if (String(data[i][idIdx]) === String(params.booking_id)) {
+        sheet.getRange(i + 1, esitoIdx + 1).setValue(params.esito || '');
+        logAudit(LOG_LEVEL.INFO, 'UPDATE_OUTCOME', params.booking_id,
+          'Esito: ' + (params.esito || 'reset'), { actor: 'admin' });
+        return successResponse({ message: 'Esito salvato.', booking_id: params.booking_id });
+      }
+    }
+
+    return errorResponse('Prenotazione non trovata.', 'BOOKING_NOT_FOUND');
+  } catch(err) {
+    logAudit(LOG_LEVEL.ERROR, 'UPDATE_OUTCOME', '', err.message, {});
+    return errorResponse('Errore aggiornamento esito.', 'UPDATE_OUTCOME_ERROR');
+  }
+}
+
 // Helper: booking anonimizzato per la dashboard admin
 function _safeDashboardBooking(b) {
   return {
@@ -378,7 +471,8 @@ function _safeDashboardBooking(b) {
     end_datetime:   String(b.end_datetime),
     notes:          String(b.notes || ''),
     status:         String(b.status),
-    cancelled_at:   String(b.cancelled_at || '')
+    cancelled_at:   String(b.cancelled_at || ''),
+    esito:          String(b.esito || '')
     // Esclusi: cancel_token, event_id, calendar_id
   };
 }
