@@ -1716,13 +1716,23 @@ function renderCoaches(container, coaches) {
 
 async function initBookingPage(coach) {
   state.selectedDate = null; state.selectedSlot = null;
+  hideAlert();
   renderCoachInfoBar(coach);
-  await loadEventDatesSummary();
+  showStep(1);
+
+  // Svuota subito il calendario per non mostrare dati del coach precedente
+  const calDays = document.getElementById('cal-days');
+  if (calDays) showLoading(calDays, 'Caricamento disponibilità...');
+
+  // Se già in cache, usa quelli (nessuna chiamata API)
+  const cached = state.summaryCache[coach.id];
+  const isCached = cached && EVENT_DATES.every(function(d) { return cached[d] !== null && cached[d] !== undefined; });
+  if (!isCached) await loadEventDatesSummary();
+
   renderEventDates();
   document.getElementById('btn-back-to-cal').onclick = function() { state.selectedSlot=null; showStep(1); };
   document.getElementById('btn-back-to-slots').onclick = function() { showStep(2); };
   document.getElementById('booking-form').onsubmit = async function(e) { e.preventDefault(); await submitBooking(); };
-  showStep(1);
 }
 
 function renderCoachInfoBar(coach) {
@@ -1731,7 +1741,7 @@ function renderCoachInfoBar(coach) {
   setText(document.getElementById('coach-name-bar'), fn.trim());
   setText(document.getElementById('coach-role-bar'), coach.ruolo||'Coach');
   const img = document.getElementById('coach-avatar');
-  if (img) { img.src=avatarFallback(fn); if (coach.foto_url){const t=new Image();t.onload=()=>{img.src=coach.foto_url;};t.src=coach.foto_url;} }
+  if (img) { img.src=avatarFallback(fn); const photoUrl=(COACH_META[coach.id]&&COACH_META[coach.id].photo)||coach.foto_url; if(photoUrl){const t=new Image();t.onload=()=>{img.src=photoUrl;};t.src=photoUrl;} }
   show(bar);
 }
 
