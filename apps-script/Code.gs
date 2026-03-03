@@ -19,6 +19,8 @@ function doGet(e) {
           return _buildCancelPageResponse(params.token, result);
         }
         return errorResponse('Token di cancellazione mancante.', 'MISSING_TOKEN');
+      case 'getAdminBookings':   return handleGetAdminBookings(params);
+      case 'getCoachBookings':   return handleGetCoachBookings(params);
       default:
         return _buildWelcomePage();
     }
@@ -47,6 +49,7 @@ function doPost(e) {
       case 'listCoaches':             return handleListCoaches(params);
       case 'getAvailability':         return handleGetAvailability(params);
       case 'getAvailabilitySummary':  return handleGetAvailabilitySummary(params);
+      case 'adminCancelBooking':      return handleAdminCancelBooking(params);
       default:
         return errorResponse('Action non riconosciuta: ' + action, 'UNKNOWN_ACTION');
     }

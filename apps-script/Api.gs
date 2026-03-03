@@ -179,6 +179,210 @@ function handleCreateBooking(params) {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// DASHBOARD HANDLERS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * GET ?action=getAdminBookings&admin_token=TOKEN[&date=YYYY-MM-DD][&coach_id=X]
+ * Restituisce tutte le prenotazioni con statistiche aggregate.
+ * Esclude campi sensibili: cancel_token, event_id, calendar_id.
+ */
+function handleGetAdminBookings(params) {
+  try {
+    if (!params.admin_token || params.admin_token !== DASHBOARD_ADMIN_TOKEN) {
+      return errorResponse('Non autorizzato.', 'UNAUTHORIZED');
+    }
+
+    const allConfirmed  = getBookingsByStatus(BOOKING_STATUS.CONFIRMED);
+    const allCancelled  = getBookingsByStatus(BOOKING_STATUS.CANCELLED);
+    const allBookings   = allConfirmed.concat(allCancelled);
+
+    // Filtro opzionale per data
+    let filtered = allBookings;
+    if (params.date) {
+      filtered = filtered.filter(function(b) {
+        return String(b.start_datetime || '').indexOf(params.date) === 0 ||
+               String(b.start_datetime || '').indexOf(params.date) !== -1 &&
+               _isoDatePart(b.start_datetime) === params.date;
+      });
+    }
+    // Filtro opzionale per coach
+    if (params.coach_id) {
+      filtered = filtered.filter(function(b) {
+        return String(b.coach_id) === String(params.coach_id);
+      });
+    }
+
+    const safe = filtered.map(_safeDashboardBooking);
+
+    // Stats globali (sui dati non filtrati per coach/data)
+    const confirmedCount = allConfirmed.length;
+    const cancelledCount = allCancelled.length;
+
+    // Stats per giorno evento
+    const dayStats = {};
+    ['2026-03-13','2026-03-14','2026-03-15'].forEach(function(d) {
+      dayStats[d] = allConfirmed.filter(function(b) {
+        return _isoDatePart(b.start_datetime) === d;
+      }).length;
+    });
+
+    return successResponse({
+      bookings: safe,
+      meta: {
+        total:     confirmedCount + cancelledCount,
+        confirmed: confirmedCount,
+        cancelled: cancelledCount,
+        per_day:   dayStats
+      }
+    });
+
+  } catch (err) {
+    logAudit(LOG_LEVEL.ERROR, 'GET_ADMIN_BOOKINGS', '', err.message, {});
+    return errorResponse('Errore nel recupero delle prenotazioni.', 'GET_ADMIN_BOOKINGS_ERROR');
+  }
+}
+
+/**
+ * GET ?action=getCoachBookings&coach_id=X&coach_token=TOKEN[&date=YYYY-MM-DD]
+ * Restituisce le prenotazioni del coach (read-only).
+ * Esclude: client_email, cancel_token, event_id, calendar_id.
+ */
+function handleGetCoachBookings(params) {
+  try {
+    if (!params.coach_id)    return errorResponse('coach_id mancante.', 'MISSING_COACH_ID');
+    if (!params.coach_token) return errorResponse('coach_token mancante.', 'MISSING_COACH_TOKEN');
+
+    const coach = getCoachById(params.coach_id);
+    if (!coach) return errorResponse('Coach non trovato.', 'COACH_NOT_FOUND');
+
+    if (!coach.dashboard_token || String(coach.dashboard_token) !== String(params.coach_token)) {
+      return errorResponse('Non autorizzato.', 'UNAUTHORIZED');
+    }
+
+    const allConfirmed = getBookingsByStatus(BOOKING_STATUS.CONFIRMED);
+    let bookings = allConfirmed.filter(function(b) {
+      return String(b.coach_id) === String(params.coach_id);
+    });
+
+    if (params.date) {
+      bookings = bookings.filter(function(b) {
+        return _isoDatePart(b.start_datetime) === params.date;
+      });
+    }
+
+    // Ordina per start_datetime
+    bookings.sort(function(a, b) {
+      return new Date(a.start_datetime) - new Date(b.start_datetime);
+    });
+
+    const safe = bookings.map(function(b) {
+      return {
+        booking_id:     String(b.booking_id),
+        coach_id:       String(b.coach_id),
+        coach_name:     String(b.coach_name),
+        client_name:    String(b.client_name),
+        client_surname: String(b.client_surname),
+        client_phone:   String(b.client_phone || ''),
+        start_datetime: String(b.start_datetime),
+        end_datetime:   String(b.end_datetime),
+        notes:          String(b.notes || ''),
+        status:         String(b.status)
+        // Esclusi: client_email, cancel_token, event_id, calendar_id
+      };
+    });
+
+    return successResponse({
+      bookings: safe,
+      coach: {
+        id:      String(coach.id),
+        nome:    String(coach.nome),
+        cognome: String(coach.cognome),
+        ruolo:   String(coach.ruolo || '')
+      },
+      total: safe.length
+    });
+
+  } catch (err) {
+    logAudit(LOG_LEVEL.ERROR, 'GET_COACH_BOOKINGS', '', err.message, {});
+    return errorResponse('Errore nel recupero delle prenotazioni.', 'GET_COACH_BOOKINGS_ERROR');
+  }
+}
+
+/**
+ * POST { action: 'adminCancelBooking', admin_token, booking_id }
+ * Cancella una prenotazione con audit actor='admin'.
+ */
+function handleAdminCancelBooking(params) {
+  try {
+    if (!params.admin_token || params.admin_token !== DASHBOARD_ADMIN_TOKEN) {
+      return errorResponse('Non autorizzato.', 'UNAUTHORIZED');
+    }
+    if (!params.booking_id) return errorResponse('booking_id mancante.', 'MISSING_BOOKING_ID');
+
+    const booking = getBookingById(params.booking_id);
+    if (!booking) return errorResponse('Prenotazione non trovata.', 'BOOKING_NOT_FOUND');
+
+    if (String(booking.status) === BOOKING_STATUS.CANCELLED) {
+      return errorResponse('Prenotazione già cancellata.', 'ALREADY_CANCELLED');
+    }
+
+    const coach = getCoachById(String(booking.coach_id));
+
+    const calendarId = String(booking.calendar_id || '');
+    const eventId    = String(booking.event_id    || '');
+    if (calendarId && eventId) {
+      try { cancelCalendarEvent(calendarId, eventId); } catch(e) {}
+    }
+
+    updateBookingStatus(String(booking.booking_id), BOOKING_STATUS.CANCELLED);
+
+    logAudit(LOG_LEVEL.INFO, 'ADMIN_CANCEL_BOOKING', String(booking.booking_id),
+      'Cancellazione admin dalla dashboard', { actor: 'admin', clientEmail: booking.client_email });
+
+    if (coach) {
+      try { sendCancellationToClient(booking, coach); } catch(e) {}
+      try { sendCancellationToCoach(booking, coach);  } catch(e) {}
+    }
+
+    return successResponse({
+      message: 'Prenotazione cancellata.',
+      booking_id: String(booking.booking_id)
+    });
+
+  } catch (err) {
+    logAudit(LOG_LEVEL.ERROR, 'ADMIN_CANCEL_BOOKING', '', err.message, {});
+    return errorResponse('Errore durante la cancellazione.', 'ADMIN_CANCEL_ERROR');
+  }
+}
+
+// Helper: estrae la parte data da un ISO datetime
+function _isoDatePart(isoStr) {
+  if (!isoStr) return '';
+  return String(isoStr).substring(0, 10);
+}
+
+// Helper: booking anonimizzato per la dashboard admin
+function _safeDashboardBooking(b) {
+  return {
+    booking_id:     String(b.booking_id),
+    created_at:     String(b.created_at || ''),
+    coach_id:       String(b.coach_id),
+    coach_name:     String(b.coach_name),
+    client_name:    String(b.client_name),
+    client_surname: String(b.client_surname),
+    client_email:   String(b.client_email || ''),
+    client_phone:   String(b.client_phone || ''),
+    start_datetime: String(b.start_datetime),
+    end_datetime:   String(b.end_datetime),
+    notes:          String(b.notes || ''),
+    status:         String(b.status),
+    cancelled_at:   String(b.cancelled_at || '')
+    // Esclusi: cancel_token, event_id, calendar_id
+  };
+}
+
 function handleCancelBooking(params) {
   try {
     const token = (params.token || params.cancel_token || '').trim();

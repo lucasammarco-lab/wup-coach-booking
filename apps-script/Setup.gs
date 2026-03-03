@@ -262,6 +262,95 @@ function blockUnavailableSlots() {
   SpreadsheetApp.getUi().alert(msg);
 }
 
+/**
+ * Aggiunge la colonna dashboard_token al foglio Coaches (se non esiste),
+ * genera un token per ogni coach attivo e invia via email i link personali.
+ * Al termine logga e invia all'ADMIN_EMAIL la lista completa di URL.
+ * Eseguire UNA SOLA VOLTA dall'editor Apps Script.
+ */
+function generateDashboardTokens() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = ss.getSheetByName(SHEETS.COACHES);
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0];
+
+  // Aggiungi colonna dashboard_token se non esiste
+  let colToken = headers.indexOf('dashboard_token');
+  if (colToken === -1) {
+    colToken = headers.length;
+    sheet.getRange(1, colToken + 1).setValue('dashboard_token');
+    sheet.getRange(1, colToken + 1).setFontWeight('bold').setBackground('#D3D3D3');
+    Logger.log('Colonna dashboard_token aggiunta in posizione ' + (colToken + 1));
+  }
+
+  const colId      = headers.indexOf('id');
+  const colNome    = headers.indexOf('nome');
+  const colCognome = headers.indexOf('cognome');
+  const colActive  = headers.indexOf('active');
+
+  const DASHBOARD_BASE_URL = 'https://lucasammarco-lab.github.io/wup-coach-dashboard/coach.html';
+  const urlList = [];
+  let generati = 0;
+
+  for (let i = 1; i < data.length; i++) {
+    const row = data[i];
+    const active = String(row[colActive]).toUpperCase();
+    if (active !== 'TRUE') continue;
+
+    const coachId  = String(row[colId]);
+    const nome     = String(row[colNome]);
+    const cognome  = String(row[colCognome]);
+
+    // Genera sempre un nuovo token (sovrascrive eventuale precedente)
+    const token = generateToken();
+    sheet.getRange(i + 1, colToken + 1).setValue(token);
+
+    const url = DASHBOARD_BASE_URL + '?id=' + encodeURIComponent(coachId) + '&token=' + token;
+    urlList.push({ coachId: coachId, nome: nome + ' ' + cognome, url: url });
+
+    // Invia email al coach con il proprio link
+    const coach = _rowToCoachFromRow(headers, row);
+    coach.dashboard_token = token;
+    try {
+      sendDashboardLinkToCoach(coach, url);
+    } catch (e) {
+      Logger.log('[WARN] Email non inviata a ' + coach.email + ': ' + e.message);
+    }
+
+    generati++;
+    Utilities.sleep(300);
+  }
+
+  // Email riepilogo all'admin
+  const adminBody = urlList.map(function(u) {
+    return u.coachId + ' — ' + u.nome + '\n' + u.url;
+  }).join('\n\n');
+  const adminHtml = '<h2 style="color:#E57711">Dashboard Coach — Link generati</h2>' +
+    '<p>Generati ' + generati + ' token. Lista URL:</p>' +
+    '<table style="border-collapse:collapse;width:100%">' +
+    urlList.map(function(u) {
+      return '<tr style="border-bottom:1px solid #eee"><td style="padding:8px;font-weight:bold">' +
+        u.nome + '</td><td style="padding:8px"><a href="' + u.url + '">' + u.url + '</a></td></tr>';
+    }).join('') +
+    '</table>';
+  GmailApp.sendEmail(
+    ADMIN_EMAIL,
+    '[WUP] Dashboard coach — link generati (' + generati + ')',
+    adminBody,
+    { from: SENDER_EMAIL, name: SENDER_NAME, htmlBody: buildEmailTemplate('Link Dashboard Coach', adminHtml) }
+  );
+
+  Logger.log('generateDashboardTokens completato: ' + generati + ' coach aggiornati.');
+  SpreadsheetApp.getUi().alert('Token generati: ' + generati + '\nEmail inviate ai coach e riepilogo inviato ad admin.');
+}
+
+// Helper interno usato da generateDashboardTokens
+function _rowToCoachFromRow(headers, row) {
+  const coach = {};
+  headers.forEach(function(h, i) { coach[h] = row[i]; });
+  return coach;
+}
+
 function _applyHeaders(sheet, headers) {
   const headerRange = sheet.getRange(1, 1, 1, headers.length);
   headerRange.setValues([headers]);

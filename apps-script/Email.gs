@@ -183,6 +183,37 @@ function sendAdminAlert(subject, message) {
   }
 }
 
+/**
+ * Invia al coach il link personale per la sua dashboard (read-only).
+ */
+function sendDashboardLinkToCoach(coach, url) {
+  const coachFullName = ((coach.nome || '') + ' ' + (coach.cognome || '')).trim();
+  const bodyHtml = [
+    '<p>Ciao <strong>' + sanitizeString(coachFullName) + '</strong>,</p>',
+    '<p>ecco il tuo link personale per consultare le prenotazioni WUP 13-15 marzo 2026:</p>',
+    '<p style="margin:20px 0">',
+    '<a href="' + url + '" style="display:inline-block;background:#E57711;color:#fff;padding:14px 28px;',
+    'text-decoration:none;border-radius:8px;font-size:15px;font-weight:700">',
+    'Vedi i tuoi appuntamenti</a></p>',
+    '<p style="font-size:12px;color:#888;word-break:break-all">Link diretto: ' + url + '</p>',
+    '<p style="font-size:12px;color:#aaa">Il link è personale e riservato a te. Non condividerlo.</p>'
+  ].join('');
+
+  GmailApp.sendEmail(
+    coach.email,
+    '[WUP] Il tuo link dashboard prenotazioni',
+    'Accedi alla tua dashboard: ' + url,
+    {
+      from:     SENDER_EMAIL,
+      name:     SENDER_NAME,
+      htmlBody: buildEmailTemplate('La tua dashboard WUP', bodyHtml)
+    }
+  );
+
+  logAudit(LOG_LEVEL.INFO, 'DASHBOARD_LINK_SENT', '',
+    'Link dashboard inviato a ' + coach.email, { coachId: coach.id });
+}
+
 function buildEmailTemplate(title, bodyHtml) {
   return '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">' +
   '<style>body{margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:#f4f4f4}' +

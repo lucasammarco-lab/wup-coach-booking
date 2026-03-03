@@ -65,3 +65,7 @@ const LOG_LEVEL = {
   WARN:  'WARN',
   ERROR: 'ERROR'
 };
+
+// Token segreto per la dashboard admin (Alessia).
+// Genera con generateToken() e incollalo qui, poi rideploya.
+const DASHBOARD_ADMIN_TOKEN = 'REPLACE_WITH_GENERATED_TOKEN';
