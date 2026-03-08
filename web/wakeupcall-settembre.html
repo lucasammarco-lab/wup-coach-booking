@@ -313,8 +313,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   content: '';
   position: absolute;
   inset: 0;
-  background: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1920&q=80&auto=format') center/cover no-repeat;
-  opacity: 0.18;
+  background: url('https://images.unsplash.com/photo-1587825140708-dfaf18c4f4ab?w=1920&q=80&auto=format') center/cover no-repeat;
+  opacity: 0.2;
   z-index: 0;
 }
 
@@ -717,8 +717,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
-.video-overlay {
-  display: none;
+.video-thumb video {
+  border-radius: var(--radius-xl);
 }
 
 .play-btn {
@@ -1052,7 +1052,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
    14. COUNTERS SECTION
 ============================================================ */
 .counters-section {
-  padding-block: var(--space-80);
+  padding-block: var(--space-96);
   background: var(--gradient-dark);
   position: relative;
   overflow: hidden;
@@ -1062,13 +1062,22 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   content: '';
   position: absolute;
   inset: 0;
-  background: url('https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1920&q=80&auto=format') center/cover no-repeat;
-  opacity: 0.12;
+  background: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1920&q=80&auto=format') center/cover no-repeat;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.counters-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(44,46,56,0.85) 0%, rgba(26,26,46,0.9) 100%);
   pointer-events: none;
 }
 
 .counters-grid {
   position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-32);
@@ -1076,14 +1085,30 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .counter-item {
   text-align: center;
-  padding: var(--space-32) var(--space-24);
+  padding: var(--space-40) var(--space-24);
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(8px);
+  transition: transform var(--transition-base), background var(--transition-base);
+}
+
+.counter-item:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.08);
+}
+
+.counter-icon {
+  font-size: 1.75rem;
+  margin-bottom: var(--space-12);
+  display: block;
 }
 
 .counter-number {
   font-family: var(--font-heading);
   font-size: clamp(2.5rem, 5vw, 3.75rem);
   font-weight: 900;
-  color: var(--color-accent);
+  color: var(--color-secondary);
   line-height: 1;
   margin-bottom: var(--space-12);
   letter-spacing: -0.02em;
@@ -1091,7 +1116,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .counter-label {
   font-size: 0.9375rem;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255,255,255,0.7);
   font-weight: 500;
   line-height: 1.4;
 }
@@ -1371,36 +1396,119 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
    18. SITE FOOTER
 ============================================================ */
 .site-footer {
-  background: var(--color-text);
-  padding-block: var(--space-32);
+  background: #1a1a2e;
+  padding-block: var(--space-64) var(--space-32);
 }
 
-.footer-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-24);
-  flex-wrap: wrap;
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: var(--space-48);
+  padding-bottom: var(--space-40);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: var(--space-32);
+}
+
+.footer-brand p {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.7;
+  margin-top: var(--space-16);
+  max-width: 320px;
 }
 
 .footer-logo {
   filter: brightness(0) invert(1);
-  opacity: 0.7;
+  opacity: 0.8;
+}
+
+.footer-heading {
+  font-family: var(--font-heading);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-16);
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li { margin-bottom: var(--space-8); }
+
+.footer-links a {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-links a:hover { color: var(--color-secondary); }
+
+.footer-social {
+  display: flex;
+  gap: var(--space-12);
+  margin-top: var(--space-16);
+}
+
+.footer-social a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.footer-social a:hover {
+  background: var(--color-secondary);
+  color: white;
+}
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-16);
 }
 
 .footer-copy {
-  font-size: 0.8125rem;
-  color: rgba(255,255,255,0.45);
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.35);
   line-height: 1.6;
 }
 
 .footer-copy a {
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.5);
   text-decoration: underline;
   transition: color var(--transition-fast);
 }
 
 .footer-copy a:hover { color: rgba(255,255,255,0.9); }
+
+.footer-badges {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.footer-badge {
+  font-size: 0.6875rem;
+  color: rgba(255,255,255,0.4);
+  padding: 4px 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+}
 
 /* ============================================================
    19. STICKY MOBILE CTA BAR
@@ -1776,7 +1884,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .testimonials-track::-webkit-scrollbar { display: none; }
   .testimonial-card { scroll-snap-align: start; }
 
-  .counters-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+  .counters-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-12); }
   .counter-item { padding: var(--space-24) var(--space-16); }
   .counter-number { font-size: 2.25rem; }
 
@@ -1786,7 +1894,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .final-cta-inner { grid-template-columns: 1fr; gap: var(--space-32); }
   .final-cta-title { font-size: clamp(1.75rem, 7vw, 2.25rem); }
 
-  .footer-inner { flex-direction: column; text-align: center; }
+  .footer-top { grid-template-columns: 1fr; gap: var(--space-32); text-align: center; }
+  .footer-brand p { margin-inline: auto; }
+  .footer-social { justify-content: center; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .footer-badges { justify-content: center; }
 
   .mobile-cta-bar { display: block; }
 
@@ -2053,10 +2165,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
         <div class="video-thumb-gradient">
           <span>Wake Up Call 2026</span>
         </div>
-        <button class="play-btn" aria-label="Riproduci video">
+        <button class="play-btn" id="videoPlayBtn" aria-label="Riproduci video">
           <svg width="24" height="28" viewBox="0 0 24 28" fill="none"><path d="M2 2l20 12L2 26V2z" fill="white"/></svg>
         </button>
-        <div class="video-overlay"></div>
       </div>
     </div>
   </div>
@@ -2260,19 +2371,23 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <div class="container">
     <div class="counters-grid">
       <div class="counter-item" data-target="60000" data-suffix="+">
-        <div class="counter-number"><span class="counter-val">0</span>+</div>
+        <span class="counter-icon">&#127891;</span>
+        <div class="counter-number"><span class="counter-val">60.000</span>+</div>
         <div class="counter-label">Vite trasformate</div>
       </div>
       <div class="counter-item" data-target="98" data-suffix="%">
-        <div class="counter-number"><span class="counter-val">0</span>%</div>
+        <span class="counter-icon">&#11088;</span>
+        <div class="counter-number"><span class="counter-val">98</span>%</div>
         <div class="counter-label">Soddisfazione partecipanti</div>
       </div>
       <div class="counter-item" data-target="20" data-suffix="+">
-        <div class="counter-number"><span class="counter-val">0</span>+</div>
+        <span class="counter-icon">&#128200;</span>
+        <div class="counter-number"><span class="counter-val">20</span>+</div>
         <div class="counter-label">Anni di track record</div>
       </div>
       <div class="counter-item" data-target="50000" data-suffix="+">
-        <div class="counter-number"><span class="counter-val">0</span>+</div>
+        <span class="counter-icon">&#127915;</span>
+        <div class="counter-number"><span class="counter-val">50.000</span>+</div>
         <div class="counter-label">Posti disponibili 2026</div>
       </div>
     </div>
@@ -2443,9 +2558,42 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 ============================================================ -->
 <footer class="site-footer">
   <div class="container">
-    <div class="footer-inner">
-      <img src="https://lp.alfiobardolla.com/wp-content/uploads/2025/10/Alfio-Bardolla-Training-Group-Logo-Color-1.webp" alt="Alfio Bardolla Training Group" height="32" class="footer-logo">
-      <p class="footer-copy">&copy; 2026 Alfio Bardolla Training Group S.r.l. &mdash; P.IVA 09133360960 &mdash; <a href="https://www.alfiobardolla.com/privacy-policy/">Privacy Policy</a> &mdash; <a href="https://www.alfiobardolla.com/termini-e-condizioni/">Termini e Condizioni</a></p>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="https://lp.alfiobardolla.com/wp-content/uploads/2025/10/Alfio-Bardolla-Training-Group-Logo-Color-1.webp" alt="Alfio Bardolla Training Group" height="32" class="footer-logo">
+        <p>La pi&ugrave; grande azienda di formazione finanziaria in Europa. Dal 2004 aiutiamo le persone a raggiungere la libert&agrave; finanziaria.</p>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/alfio.bardolla/" aria-label="Facebook" target="_blank" rel="noopener">f</a>
+          <a href="https://www.instagram.com/alfiobardolla/" aria-label="Instagram" target="_blank" rel="noopener">ig</a>
+          <a href="https://www.youtube.com/@AlfioBardollaTrainingGroup" aria-label="YouTube" target="_blank" rel="noopener">yt</a>
+          <a href="https://x.com/alfiobardolla" aria-label="X/Twitter" target="_blank" rel="noopener">x</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Evento</h4>
+        <ul class="footer-links">
+          <li><a href="#hero">Panoramica</a></li>
+          <li><a href="#lead-form">Registrati Gratis</a></li>
+          <li><a href="#faq">Domande Frequenti</a></li>
+          <li><a href="https://www.alfiobardolla.com/faq/partecipazione-al-wake-up-call-con-biglietto-fisico/">Biglietto Fisico</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Azienda</h4>
+        <ul class="footer-links">
+          <li><a href="https://www.alfiobardolla.com/">Sito Ufficiale</a></li>
+          <li><a href="https://www.alfiobardolla.com/blog/">Blog</a></li>
+          <li><a href="https://www.alfiobardolla.com/contatti/">Contatti</a></li>
+          <li><a href="https://open.spotify.com/show/2IxX2YT6gUiOg1gpHGgXvy" target="_blank" rel="noopener">Podcast</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; 2026 Alfio Bardolla Training Group S.p.A. &mdash; P.IVA 09133360960 &mdash; <a href="https://www.alfiobardolla.com/privacy-policy/">Privacy Policy</a> &mdash; <a href="https://www.alfiobardolla.com/termini-e-condizioni/">Termini e Condizioni</a></p>
+      <div class="footer-badges">
+        <span class="footer-badge">AIM Italia: ABTG</span>
+        <span class="footer-badge">ISO 9001:2015</span>
+      </div>
     </div>
   </div>
 </footer>
@@ -2623,10 +2771,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
   var easeOut = function(t) { return 1 - Math.pow(1 - t, 3); };
 
+  // Reset to 0 immediately for animation effect
+  items.forEach(function(el) {
+    var valEl = el.querySelector('.counter-val');
+    if (valEl) valEl.textContent = '0';
+  });
+
   function animateCounter(el) {
     var target   = parseInt(el.dataset.target, 10);
     var valEl    = el.querySelector('.counter-val');
-    var duration = 2000;
+    var duration = 2200;
     var start    = performance.now();
 
     function step(now) {
@@ -2648,7 +2802,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.3 });
+  }, { threshold: 0.2 });
 
   items.forEach(function(el) { observer.observe(el); });
 })();
@@ -2869,47 +3023,21 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 // 10. VIDEO PLAY BUTTON — HTML5 video lightbox
 // ============================================================
 (function initVideo() {
-  var playBtn = document.querySelector('.play-btn');
-  if (!playBtn) return;
+  var playBtn = document.getElementById('videoPlayBtn');
+  var thumb = document.getElementById('videoThumb');
+  if (!playBtn || !thumb) return;
 
   playBtn.addEventListener('click', function() {
-    var overlay = document.createElement('div');
-    overlay.style.cssText =
-      'position:fixed;inset:0;z-index:3000;background:rgba(0,0,10,0.9);' +
-      'display:flex;align-items:center;justify-content:center;' +
-      'backdrop-filter:blur(8px);cursor:pointer;';
-
     var video = document.createElement('video');
     video.src = 'https://lp.alfiobardolla.com/wp-content/uploads/2026/01/YTDown.com_YouTube_Wake-Up-Call-Alfio-Bardolla-Training-Gro_Media_5LPK2pfh5Zs_002_720p.mp4';
     video.controls = true;
     video.autoplay = true;
     video.playsInline = true;
-    video.style.cssText =
-      'width:min(90vw,900px);aspect-ratio:16/9;border:none;border-radius:12px;' +
-      'box-shadow:0 32px 80px rgba(0,0,0,0.8);background:#000;';
+    video.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:inherit;background:#000;';
 
-    var closeX = document.createElement('button');
-    closeX.textContent = '\u00D7';
-    closeX.style.cssText =
-      'position:fixed;top:24px;right:24px;background:rgba(255,255,255,0.15);' +
-      'border:none;color:white;font-size:2rem;width:48px;height:48px;' +
-      'border-radius:50%;cursor:pointer;display:flex;align-items:center;' +
-      'justify-content:center;line-height:1;font-family:sans-serif;';
-
-    overlay.appendChild(video);
-    overlay.appendChild(closeX);
-    document.body.appendChild(overlay);
-    document.body.style.overflow = 'hidden';
-
-    function close() {
-      video.pause();
-      overlay.remove();
-      document.body.style.overflow = '';
-    }
-
-    overlay.addEventListener('click', function(e) { if (e.target === overlay) close(); });
-    closeX.addEventListener('click', close);
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') close(); }, { once: true });
+    thumb.innerHTML = '';
+    thumb.style.cursor = 'default';
+    thumb.appendChild(video);
   });
 })();
 
