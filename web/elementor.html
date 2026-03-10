@@ -963,30 +963,37 @@
   grid-column: 1 / -1;
   margin-bottom: 6px;
 }
-#wup-app .seller-field-wrapper select {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px solid var(--gray-light);
-  border-radius: var(--radius-sm);
-  font-size: .95rem;
-  font-family: inherit;
-  color: var(--primary);
-  background: var(--white);
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
+#wup-app .seller-field-wrapper select,
+#wup-app .seller-field-wrapper select#f-seller {
+  width: 100% !important;
+  padding: 12px 16px !important;
+  border: 1px solid var(--gray-light) !important;
+  border-radius: var(--radius-sm) !important;
+  font-size: .95rem !important;
+  font-family: inherit !important;
+  color: var(--primary) !important;
+  background: var(--white) !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
   cursor: pointer;
   transition: border-color var(--transition);
+  height: auto !important;
+  line-height: 1.5 !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
-#wup-app .seller-field-wrapper select:focus {
-  outline: none;
-  border-color: var(--orange);
-  box-shadow: 0 0 0 3px rgba(229,119,17,.12);
+#wup-app .seller-field-wrapper select:focus,
+#wup-app .seller-field-wrapper select#f-seller:focus {
+  outline: none !important;
+  border-color: var(--orange) !important;
+  box-shadow: 0 0 0 3px rgba(229,119,17,.12) !important;
 }
 #wup-app .seller-field-wrapper select.error {
-  border-color: var(--error);
+  border-color: var(--error) !important;
 }
 #wup-app .seller-divider {
   grid-column: 1 / -1;
