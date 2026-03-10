@@ -8,12 +8,12 @@
 const SPREADSHEET_ID = '1Riwitz-Qwip2HctDWBmrCXM5XfbEZ3sEkSA5RPKT1GI';
 
 // Email dell'amministratore WUP (riceve alert tecnici)
-const ADMIN_EMAIL = 'marco.sorrentino@alfiobardolla.com';
+const ADMIN_EMAIL = 'luca.sammarco@alfiobardolla.com';
 
 // Email mittente per tutte le email transazionali
 // IMPORTANTE: deve essere configurata come alias "Invia come" nel tuo Gmail
 const SENDER_EMAIL = 'info@alfiobardolla.com';
-const SENDER_NAME  = 'WUP Coach Booking';
+const SENDER_NAME  = 'Alfio Bardolla Training Group';
 
 // Nome dell'applicazione (usato nei template email e log)
 const APP_NAME = 'WUP Coach Booking';
@@ -68,4 +68,4 @@ const LOG_LEVEL = {
 
 // Token segreto per la dashboard admin (Alessia).
 // Genera con generateToken() e incollalo qui, poi rideploya.
-const DASHBOARD_ADMIN_TOKEN = 'REPLACE_WITH_GENERATED_TOKEN';
+const DASHBOARD_ADMIN_TOKEN = 'f05edf3584610138878f6d799daea1fd';
