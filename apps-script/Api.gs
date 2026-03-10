@@ -463,6 +463,53 @@ function handleGetCoachLinks(params) {
 }
 
 /**
+ * GET ?action=getSellerLinks&admin_token=TOKEN
+ * Restituisce tutti i venditori attivi con il loro URL dashboard personale.
+ */
+function handleGetSellerLinks(params) {
+  try {
+    if (!params.admin_token || params.admin_token !== DASHBOARD_ADMIN_TOKEN) {
+      return errorResponse('Non autorizzato.', 'UNAUTHORIZED');
+    }
+
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheet = ss.getSheetByName(SHEETS.SELLERS);
+    if (!sheet) return successResponse({ sellers: [] });
+    const data = sheet.getDataRange().getValues();
+    const headers = data[0];
+
+    const colId      = headers.indexOf('id');
+    const colNome    = headers.indexOf('nome');
+    const colCognome = headers.indexOf('cognome');
+    const colEmail   = headers.indexOf('email');
+    const colActive  = headers.indexOf('active');
+    const colToken   = headers.indexOf('dashboard_token');
+
+    const BASE = 'https://wup-platform.github.io/wup-coach-dashboard/seller.html';
+    const sellers = [];
+
+    for (let i = 1; i < data.length; i++) {
+      const row = data[i];
+      if (String(row[colActive]).toUpperCase() !== 'TRUE') continue;
+      const token = String(row[colToken] || '');
+      const id    = String(row[colId]);
+      sellers.push({
+        id:      id,
+        nome:    String(row[colNome]),
+        cognome: String(row[colCognome]),
+        email:   String(row[colEmail] || ''),
+        url:     token ? BASE + '?id=' + encodeURIComponent(id) + '&token=' + token : ''
+      });
+    }
+
+    return successResponse({ sellers: sellers });
+  } catch(err) {
+    logAudit(LOG_LEVEL.ERROR, 'GET_SELLER_LINKS', '', err.message, {});
+    return errorResponse('Errore nel recupero dei link venditori.', 'GET_SELLER_LINKS_ERROR');
+  }
+}
+
+/**
  * POST { action: 'updateBookingOutcome', admin_token, booking_id, esito }
  * Aggiorna l'esito commerciale di una prenotazione (VENDUTO / NON_VENDUTO / IN_TRATTATIVA).
  * Crea la colonna 'esito' nel foglio Bookings se non esiste.

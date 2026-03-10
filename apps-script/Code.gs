@@ -23,6 +23,7 @@ function doGet(e) {
       case 'getCoachBookings':   return handleGetCoachBookings(params);
       case 'getCoachLinks':      return handleGetCoachLinks(params);
       case 'get_sellers':        return handleGetSellers(params);
+      case 'getSellerLinks':     return handleGetSellerLinks(params);
       case 'seller_bookings':    return handleSellerBookings(params);
       case 'seller_auth':        return handleSellerAuth(params);
       default:
