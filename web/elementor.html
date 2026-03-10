@@ -303,6 +303,11 @@
   justify-content: flex-end;
 }
 
+/* Mentor card — sfondo blu SBL */
+#wup-app .coach-card-top.mentor-bg {
+  background: linear-gradient(145deg, #13284C 0%, #0e1e3a 100%);
+}
+
 /* Decorative circles in card header */
 #wup-app .coach-card-top::before {
   content: '';
@@ -1616,20 +1621,20 @@ const COACH_META = {
   'coach_005': { photo: IMG_BASE+'coach_005.png', bio: 'Trader esperto in Forex e utilizzo delle piattaforme.',                                                                                             category: 'trading'      },
   'coach_006': { photo: IMG_BASE+'coach_006.png', bio: 'Investitrice immobiliare, esperta di mercato libero, aste, stralci, cessioni di compromesso.',                                                      category: 'immobiliare'  },
   'coach_007': { photo: IMG_BASE+'coach_007.png', bio: 'Trader esperto in Forex, Cripto, ETF, Commodity.',                                                                                                  category: 'trading'      },
-  'coach_009': { photo: IMG_BASE+'coach_009.png', bio: 'Fondatore di Sana Finestra, ha trasformato la sua azienda con Smart Business Lab, aumentando il fatturato e automatizzando i processi.',            category: 'business'     },
+  'coach_009': { photo: IMG_BASE+'coach_009.png', bio: 'Fondatore di Sana Finestra, ha trasformato la sua azienda con Smart Business Lab, aumentando il fatturato e automatizzando i processi.',            category: 'mentor'       },
   'coach_010': { photo: IMG_BASE+'coach_010.png', bio: 'Imprenditore nel fitness e Mentor SBL, ha migliorato le sue competenze imprenditoriali, aumentando margini e acquisendo 250 clienti.',             category: 'business'     },
   'coach_011': { photo: IMG_BASE+'coach_011.png', bio: 'Trader esperto in Commodity e in Mindset.',                                                                                                         category: 'trading'      },
   'coach_013': { photo: IMG_BASE+'coach_013.png', bio: 'Trader esperto in opzioni USA.',                                                                                                                    category: 'trading'      },
   'coach_014': { photo: IMG_BASE+'coach_014.png', bio: 'Trader con 17 anni di esperienza, specializzato in criptovalute.',                                                                                  category: 'trading'      },
   'coach_015': { photo: IMG_BASE+'coach_015.png', bio: 'Coach esperta di linguistica e mindset sul denaro.',                                                                                                 category: 'mindset'      },
   'coach_017': { photo: IMG_BASE+'coach_017.png', bio: 'Investitore dinamico nel mercato libero, attivo in cessioni preliminari, appassionato di opportunità immobiliari e crescita personale.',            category: 'immobiliare'  },
-  'coach_018': { photo: IMG_BASE+'coach_018.png', bio: 'Co-fondatore di Connessione Finanziaria, gestisce diverse aziende nei settori automotive, Blockchain e trading immobiliare.',                      category: 'business'     },
+  'coach_018': { photo: IMG_BASE+'coach_018.png', bio: 'Co-fondatore di Connessione Finanziaria, gestisce diverse aziende nei settori automotive, Blockchain e trading immobiliare.',                      category: 'mentor'       },
   'coach_024': { photo: IMG_BASE+'coach_024.png', bio: 'Trader esperto in Forex e mercati azionari.',                                                                                                    category: 'trading'      },
 
   'coach_026': { photo: IMG_BASE+'coach_026.png', bio: 'Coach ABTG esperto in compravendite, aste e ristrutturazioni.',                                                                                      category: 'immobiliare'  },
   'coach_027': { photo: IMG_BASE+'coach_027.png', bio: 'Trader esperto in Forex e strategie di investimento.',                                                                                           category: 'trading'      },
 
-  'coach_029': { photo: IMG_BASE+'coach_029.png', bio: 'Imprenditore e Mentor SBL, gestisce più aziende con sistemi, KPI e processi scalabili. Aiuta gli imprenditori a passare da operativi a strategici.',   category: 'business'     },
+  'coach_029': { photo: IMG_BASE+'coach_029.png', bio: 'Imprenditore e Mentor SBL, gestisce più aziende con sistemi, KPI e processi scalabili. Aiuta gli imprenditori a passare da operativi a strategici.',   category: 'mentor'       },
 };
 
 const state = { coaches:[], selectedCoach:null, selectedDate:null, selectedSlot:null, summaryCache:{}, slotsCache:{}, sellers:[] };
@@ -1737,6 +1742,7 @@ function renderCoaches(container, coaches) {
     { key: 'immobiliare', label: 'Immobiliare' },
     { key: 'business',    label: 'Business' },
     { key: 'mindset',     label: 'Mindset' },
+    { key: 'mentor',      label: 'Mentor' },
   ];
   const tabBar = document.createElement('div'); tabBar.className = 'filter-tabs';
   tabs.forEach(function(t) {
@@ -1769,7 +1775,7 @@ function renderCoaches(container, coaches) {
     card.dataset.category = category;
 
     /* Card top */
-    const top = document.createElement('div'); top.className = 'coach-card-top';
+    const top = document.createElement('div'); top.className = 'coach-card-top' + (category === 'mentor' ? ' mentor-bg' : '');
 
     /* Avatar */
     const avatarWrap = document.createElement('div'); avatarWrap.className = 'coach-avatar-wrap';
@@ -1779,7 +1785,7 @@ function renderCoaches(container, coaches) {
     avatarWrap.appendChild(img);
 
     const ne = document.createElement('div'); ne.className = 'coach-name'; ne.textContent = fullName.trim();
-    const re = document.createElement('div'); re.className = 'coach-role-tag'; re.textContent = coach.ruolo || 'Coach';
+    const re = document.createElement('div'); re.className = 'coach-role-tag'; re.textContent = category === 'mentor' ? 'Mentor' : (coach.ruolo || 'Coach');
     top.appendChild(avatarWrap); top.appendChild(ne); top.appendChild(re);
 
     /* Card body */
