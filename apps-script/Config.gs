@@ -41,7 +41,8 @@ const DAYS_AHEAD_MAX = 30;
 const BOOKING_WINDOW_START_HOUR = 9;
 
 // Ora massima prenotabile (fallback se il coach non ha working_hours_end)
-const BOOKING_WINDOW_END_HOUR = 18;
+// L'ultimo slot inizia alle 18:40, sessione finisce alle 18:55
+const BOOKING_WINDOW_END_HOUR = 19;
 
 // Timeout in millisecondi per LockService (30 secondi)
 const LOCK_TIMEOUT_MS = 30000;
