@@ -605,6 +605,45 @@ function handleUpdateSalesforceFlag(params) {
   }
 }
 
+/**
+ * POST { action: 'updateBookingNotes', admin_token, booking_id, notes }
+ * Aggiorna le note di una prenotazione dalla dashboard admin.
+ */
+function handleUpdateBookingNotes(params) {
+  try {
+    if (!params.admin_token || params.admin_token !== DASHBOARD_ADMIN_TOKEN) {
+      return errorResponse('Non autorizzato.', 'UNAUTHORIZED');
+    }
+    if (!params.booking_id) return errorResponse('booking_id mancante.', 'MISSING_BOOKING_ID');
+
+    const newNotes = sanitizeString(params.notes || '');
+
+    const sheet = getSheet(SHEETS.BOOKINGS);
+    const data  = sheet.getDataRange().getValues();
+    const headers = data[0];
+    const idIdx    = headers.indexOf('booking_id');
+    const notesIdx = headers.indexOf('notes');
+
+    if (notesIdx === -1) {
+      return errorResponse('Colonna notes non trovata.', 'NOTES_COLUMN_MISSING');
+    }
+
+    for (let i = 1; i < data.length; i++) {
+      if (String(data[i][idIdx]) === String(params.booking_id)) {
+        sheet.getRange(i + 1, notesIdx + 1).setValue(newNotes);
+        logAudit(LOG_LEVEL.INFO, 'UPDATE_NOTES', params.booking_id,
+          'Note aggiornate da admin', { actor: 'admin' });
+        return successResponse({ message: 'Note salvate.', booking_id: params.booking_id });
+      }
+    }
+
+    return errorResponse('Prenotazione non trovata.', 'BOOKING_NOT_FOUND');
+  } catch(err) {
+    logAudit(LOG_LEVEL.ERROR, 'UPDATE_NOTES', '', err.message, {});
+    return errorResponse('Errore aggiornamento note.', 'UPDATE_NOTES_ERROR');
+  }
+}
+
 // Helper: booking anonimizzato per la dashboard admin
 function _safeDashboardBooking(b) {
   return {

@@ -68,6 +68,7 @@ function doPost(e) {
       case 'adminCancelBooking':      return handleAdminCancelBooking(params);
       case 'updateBookingOutcome':    return handleUpdateBookingOutcome(params);
       case 'updateSalesforceFlag':   return handleUpdateSalesforceFlag(params);
+      case 'updateBookingNotes':     return handleUpdateBookingNotes(params);
       case 'get_sellers':            return handleGetSellers(params);
       case 'seller_bookings':        return handleSellerBookings(params);
       case 'seller_auth':            return handleSellerAuth(params);
