@@ -90,6 +90,7 @@ function handleCreateBooking(params) {
     if (!params.client_name || !params.client_name.trim())    return errorResponse('Nome obbligatorio.', 'MISSING_CLIENT_NAME');
     if (!params.client_surname || !params.client_surname.trim()) return errorResponse('Cognome obbligatorio.', 'MISSING_CLIENT_SURNAME');
     if (!validateEmail(params.client_email)) return errorResponse('Email non valida.', 'INVALID_CLIENT_EMAIL');
+    if (!params.notes || !params.notes.trim()) return errorResponse('Le note sono obbligatorie.', 'MISSING_NOTES');
     if (!params.privacy_consent) return errorResponse('Accettare la privacy policy è obbligatorio.', 'MISSING_PRIVACY_CONSENT');
 
     let startDate;

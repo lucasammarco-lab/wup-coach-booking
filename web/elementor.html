@@ -1485,8 +1485,9 @@
                     <span class="field-error hidden" id="err-phone"></span>
                   </div>
                   <div class="form-group full">
-                    <label for="f-notes">Note (opzionale)</label>
-                    <textarea id="f-notes" placeholder="Eventuali note o argomenti da affrontare..."></textarea>
+                    <label for="f-notes">Note <span class="req">*</span></label>
+                    <textarea id="f-notes" placeholder="Indica brevemente l'argomento che vorresti affrontare..." required></textarea>
+                    <span class="field-error hidden" id="err-notes"></span>
                   </div>
                   <div class="privacy-group full">
                     <div class="privacy-checkbox-wrap">
@@ -1957,6 +1958,9 @@ function validateForm() {
     if (!val) { if(errEl){errEl.textContent=labels[f]+' è obbligatorio.';show(errEl);} if(input)input.classList.add('error'); valid=false; }
     else if (f==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) { if(errEl){errEl.textContent='Email non valida.';show(errEl);} if(input)input.classList.add('error'); valid=false; }
   });
+  const notesInput=document.getElementById('f-notes'), errNotes=document.getElementById('err-notes');
+  hide(errNotes); if(notesInput)notesInput.classList.remove('error');
+  if(!notesInput||!notesInput.value.trim()){if(errNotes){errNotes.textContent='Le note sono obbligatorie.';show(errNotes);}if(notesInput)notesInput.classList.add('error');valid=false;}
   const pr=document.getElementById('f-privacy'), ep=document.getElementById('err-privacy');
   hide(ep); if(pr&&!pr.checked){if(ep){ep.textContent='Devi accettare la privacy policy.';show(ep);}valid=false;}
   return valid;
