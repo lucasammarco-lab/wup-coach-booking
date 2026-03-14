@@ -565,6 +565,28 @@ function blockUnavailableSlots() {
 }
 
 /**
+ * Blocco rapido: Colombo (coach_002) — Dom 15/03 11:30–13:00
+ * Eseguire UNA VOLTA dall'editor Apps Script, poi cancellare.
+ */
+function blockColombo_dom15() {
+  const coach = getCoachById('coach_002');
+  if (!coach || !coach.calendar_managed_id) {
+    Logger.log('ERRORE: coach_002 non trovato o senza calendario');
+    return;
+  }
+  const cal = CalendarApp.getCalendarById(coach.calendar_managed_id);
+  if (!cal) {
+    Logger.log('ERRORE: calendario non accessibile per coach_002');
+    return;
+  }
+  const inizio = new Date(2026, 2, 15, 11, 30, 0); // 15 marzo 2026, 11:30
+  const fine   = new Date(2026, 2, 15, 13, 0, 0);  // 15 marzo 2026, 13:00
+  cal.createEvent('NON DISPONIBILE', inizio, fine);
+  Logger.log('Blocco creato: Colombo dom 15/03 11:30-13:00');
+  SpreadsheetApp.getUi().alert('Blocco creato: Colombo dom 15/03 11:30-13:00');
+}
+
+/**
  * Aggiunge la colonna dashboard_token al foglio Coaches (se non esiste),
  * genera un token per ogni coach attivo e invia via email i link personali.
  * Al termine logga e invia all'ADMIN_EMAIL la lista completa di URL.
